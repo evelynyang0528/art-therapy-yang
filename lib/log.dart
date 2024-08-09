@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_list_tab_scroller/scrollable_list_tab_scroller.dart';
+import 'package:test2/detailedinfo.dart';
+import 'journalentry.dart';
 class logscreen extends StatefulWidget {
-  const logscreen({super.key});
+final  List<JournalEntry> journalentries;
+
+  const logscreen({super.key,required this.journalentries});
 
   @override
   State<logscreen> createState() => _logscreenState();
@@ -38,6 +42,18 @@ class _logscreenState extends State<logscreen> {
       "Item 9 (D)",
     ],
   };
+Map<String,List<JournalEntry>> get entries{
+  final Map<String,List<JournalEntry>> datamap = {};
+  for(var entry in widget.journalentries){
+    String key = entry.months;
+    if (!datamap.containsKey(key)){
+      datamap[key] = [];
+    }
+    datamap[key]!.add(entry);
+  }
+  return datamap;
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,11 +61,11 @@ class _logscreenState extends State<logscreen> {
         title: Text("past entries"),
       ),
       body: ScrollableListTabScroller(
-        itemCount: data.length,
+        itemCount: entries.length,
         tabBuilder: (BuildContext context, int index, bool active) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            data.keys.elementAt(index),
+            entries.keys.elementAt(index),
             style: !active
                 ? null
                 : TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
@@ -58,10 +74,10 @@ class _logscreenState extends State<logscreen> {
         itemBuilder: (BuildContext context, int index) => Column(
           children: [
             Text(
-              data.keys.elementAt(index),
+               entries.keys.elementAt(index),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            ...data.values
+            ...entries.values
                 .elementAt(index)
                 .asMap()
                 .map(
@@ -74,9 +90,11 @@ class _logscreenState extends State<logscreen> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.grey),
                     alignment: Alignment.center,
-                    child: Text(index.toString()),
+                    child: Text(value.days),
                   ),
-                  title: Text(value),
+                  title: Text("${value.months} ${value.days}"),
+                    onTap: (){Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => detailedinfo(journalentry: value)));},
                 ),
               ),
             )

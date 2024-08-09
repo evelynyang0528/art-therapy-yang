@@ -23,6 +23,19 @@ class _splashscreenState extends State<splashscreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Align(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+            Container(height: 110,width: 110,color: Colors.blue,),
+            SizedBox(height: 20,),
+            Text("Art Therapy",style: TextStyle(fontSize: 28,fontFamily:"DancingScript" ),)
+          ],
+        ),
+      ),
+    );
   }
 }
