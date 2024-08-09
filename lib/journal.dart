@@ -142,6 +142,7 @@ class _journalscreenState extends State<journalscreen> {
     timeStamps??=[];
     timeStamps.add(timeStamp);
     await sharedPreferences.setStringList("j_timestamps", timeStamps);
+
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Journal saved successfully!')),
@@ -174,12 +175,15 @@ class _journalscreenState extends State<journalscreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   SizedBox(height: 15),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      controller: _textcontroller,
+                      maxLines: 5,
                     ),
-                    controller: _textcontroller,
-                    maxLines: 5,
                   ),
                   SizedBox(
                     height: 20,

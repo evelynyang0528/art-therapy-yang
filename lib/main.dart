@@ -3,7 +3,7 @@ import 'constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:test2/log.dart';
+import 'package:test2/journallistscreen.dart';
 import 'package:test2/splashscreen.dart';
 import 'journal.dart';
 import 'package:camera/camera.dart';
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         journalEntry.add(newentry);
       });
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => logscreen(journalentries: journalEntry,)));
+          .push(MaterialPageRoute(builder: (context) => JournalListScreen()));
     }
   }
   int selectedIndex = 0;
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedIndex = 2;
         Navigator.of(context)
             .push(MaterialPageRoute(
-            builder: (context) => logscreen(journalentries: journalEntry,)));
+            builder: (context) => JournalListScreen()));
       });
     }
   }
