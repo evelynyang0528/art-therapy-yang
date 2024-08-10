@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:test2/journalentry.dart';
+import 'package:test2/journal_entry.dart';
 class detailedinfo extends StatefulWidget {
 final  JournalEntry journalentry;
 

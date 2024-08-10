@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:test2/main.dart';
 import 'package:camera/camera.dart';
-class splashscreen extends StatefulWidget {
+
+class SplashScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
-  const splashscreen({super.key, required this.cameras});
+  const SplashScreen({super.key, required this.cameras});
 
   @override
-  State<splashscreen> createState() => _splashscreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _splashscreenState extends State<splashscreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     init();
   }
+
   Future<void> init() async {
-    await Future.delayed(Duration(seconds: 4)).then((value){
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) =>MyHomePage(title:"", cameras: widget.cameras,)));
+    await Future.delayed(const Duration(seconds: 4)).then((value) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => MyHomePage(
+                title: "",
+                cameras: widget.cameras,
+              ),),);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +34,19 @@ class _splashscreenState extends State<splashscreen> {
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
-            Container(height: 110,width: 110,color: Colors.blue,),
-            SizedBox(height: 20,),
-            Text("Art Therapy",style: TextStyle(fontSize: 28,fontFamily:"DancingScript" ),)
+            Container(
+              height: 110,
+              width: 110,
+              color: Colors.blue,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Art Therapy",
+              style: TextStyle(fontSize: 28, fontFamily: "DancingScript"),
+            )
           ],
         ),
       ),
