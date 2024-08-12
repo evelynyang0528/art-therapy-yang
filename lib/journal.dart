@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test2/ImageViewPage.dart';
+import 'package:test2/image_view_page.dart';
 import 'package:path/path.dart' show join;
-import 'package:test2/journalentry.dart';
+import 'package:test2/journal_entry.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'constant.dart';
@@ -212,7 +212,7 @@ class _journalscreenState extends State<journalscreen> {
                     // final newentry = JournalEntry(filepath: imagefile!.path, months:months , days: days, entry: _textcontroller.text, AIentry: "AIentry", emotion: emotion);
                     // Navigator.pop(context,newentry);
                     saveJournal();
-              
+
                   }, child: Text("Add Entry"))
                 ],
               ),

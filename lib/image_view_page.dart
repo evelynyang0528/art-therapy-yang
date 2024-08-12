@@ -11,12 +11,12 @@ class Imageviewpage extends StatefulWidget {
 }
 
 class _ImageviewpageState extends State<Imageviewpage> {
-  bool isloading=false;
+  bool isloading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("capturedimage"),
+        title: const Text("capturedimage"),
       ),
       body: Center(
         child: Image.file(File(widget.imagepath)),
