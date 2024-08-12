@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 
-client = OpenAI(api_key="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")
+
 
 def get_text():
     chat_completion = client.chat.completions.create(
