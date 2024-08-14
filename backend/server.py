@@ -1,6 +1,6 @@
 from flask import Flask
 
-from backend.image_generator import get_text
+from image_generator import generate_image, get_text
 
 
 app = Flask(__name__)
@@ -14,10 +14,13 @@ def hello_world():
 def hi_world():
     return "Our server is running."
 
+@app.route("/get_daily_image")
+def get_daily_image():
+    return
 
 @app.route("/get_image")
 def get_image():
-    get_text()
+    generate_image()
 
 
     return "get_image"

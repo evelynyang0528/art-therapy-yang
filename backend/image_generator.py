@@ -1,5 +1,7 @@
+from io import BytesIO
 from openai import OpenAI
-
+import requests
+from PIL import Image
 
 
 
@@ -17,7 +19,22 @@ def get_text():
         model="gpt-3.5-turbo",
     )
     print(chat_completion)
+    return chat_completion.choices[0].message.content
 
-
-
-
+def generate_image():
+    prompt = (
+        "Create an image designed to visually convey and enhance mental health awareness and serve as a "
+        "therapeutic tool"
+    )
+    response_image = client.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024",
+        quality="standard",
+        n=1,
+    )
+    image_url=response_image.data[0].url
+    response=requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+    local_image_path = "daily_img.jpg"
+    img.save(local_image_path, "JPEG")
