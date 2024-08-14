@@ -167,11 +167,12 @@ class _journalscreenState extends State<journalscreen> {
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 160),
-                  Text(
+                  const Text(
                     "Please Enter How You Feel?",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   SizedBox(height: 15),
@@ -190,6 +191,7 @@ class _journalscreenState extends State<journalscreen> {
                   ),
                   Text(
                     "Please Add Photos Here",
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   SizedBox(

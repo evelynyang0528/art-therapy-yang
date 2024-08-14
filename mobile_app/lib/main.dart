@@ -73,21 +73,25 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // fetchImage();
+    fetchImage();
   }
 
   List<JournalEntry> journalEntry = [];
 
   String? imageUrl;
+  String? dailyText;
 
   Future<void> fetchImage() async {
     try {
       final response = await http.get(Uri.parse('$url/get_daily_image'));
+      print(response);
       if (response.statusCode == 200) {
         setState(() {
           Map result = jsonDecode(response.body);
           imageUrl = result["image"].toString().trim();
+          dailyText=result["phrase"].toString();
         });
+
       }
     } catch (E) {
       print(E);
@@ -145,10 +149,20 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: SizedBox.expand(
           child: imageUrl != null
-              ? Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                )
+              ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Image.network(
+                        imageUrl!,
+                        fit: BoxFit.cover,
+                      ),
+                    SizedBox(height: 20,),
+                    Text(dailyText ?? "", style: TextStyle(fontSize: 20,fontFamily:"EduVICWANTBeginner" ),),
+
+                  ],
+                ),
+              )
               : Container(
                   color: Colors.cyan,
                 ),

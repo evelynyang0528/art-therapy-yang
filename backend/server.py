@@ -1,10 +1,12 @@
-from flask import Flask
+import json
+from flask import Flask, jsonify
 
+from storage_bucket_manager import StorageBucket
 from image_generator import generate_image, get_text
 
 
 app = Flask(__name__)
-
+SB = StorageBucket()
 
 @app.route("/")
 def hello_world():
@@ -16,11 +18,13 @@ def hi_world():
 
 @app.route("/get_daily_image")
 def get_daily_image():
-    return
+    with open("daily_img.txt","r") as file:
+        result=json.load(file)
+    return jsonify(result)
 
 @app.route("/get_image")
 def get_image():
-    generate_image()
+    generate_image(SB=SB)
 
 
     return "get_image"

@@ -83,5 +83,9 @@ flutter:
       fonts:
         - asset: google_fonts/DancingScript-Regular.ttf
           style: italic
+    - family: EduVICWANTBeginner
+      fonts:
+        - asset: google_fonts/EduVICWANTBeginner-Regular.ttf
+          style: italic
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

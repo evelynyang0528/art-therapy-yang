@@ -1,0 +1,4 @@
+{
+ "image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg",
+ "phrase": "\"The artwork becomes an extension of the inner self; a safe haven for releasing emotions that may otherwise remain hidden or suppressed.\" - Cathy Malchiodi"
+ }
