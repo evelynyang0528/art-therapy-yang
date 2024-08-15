@@ -1,5 +1,6 @@
 from io import BytesIO
 import json
+import random
 from openai import OpenAI
 import requests
 from PIL import Image
@@ -24,6 +25,7 @@ def get_text():
     return chat_completion.choices[0].message.content
 
 def generate_image(SB):
+
     prompt = (
         "Create an image designed to visually convey and enhance mental health awareness and serve as a "
         "therapeutic tool"
@@ -51,3 +53,35 @@ def generate_image(SB):
         }
     with open("daily_img.txt", "w") as file:
         file.write(json.dumps(response))
+
+def generate_journal_image(SB,journal):
+    prompt = (
+        f"Create an image based on the following information from a journal entry or survey response: {journal}. "
+        f"The image should visually convey and enhance mental health awareness by incorporating elements that"
+        f" symbolize healing, support, and resilience. Use calming colors, soothing shapes, and appropriate "
+        f"symbols to create a therapeutic tool that helps in relaxation and self-reflection. The design should "
+        f"aim to evoke positive emotions and provide comfort, making it a valuable resource for mental health"
+        f" awareness and support."
+    )
+    response_image = client.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024",
+        quality="standard",
+        n=1,
+    )
+    image_url=response_image.data[0].url
+    image_response=requests.get(image_url)
+    image=Image.open(BytesIO(image_response.content))
+    id=random.randint(1, 100)
+    local_image_path=f"images/image{id}"
+    image.save(local_image_path, "JPEG")
+    url=SB.uploadfile(f"images/img{id}.jpg",local_image_path)
+    result = {"image": url}
+    print(result)
+    return result
+    
+
+
+
+

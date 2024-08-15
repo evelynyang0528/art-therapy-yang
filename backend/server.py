@@ -1,5 +1,5 @@
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 from storage_bucket_manager import StorageBucket
 from image_generator import generate_image, get_text
@@ -22,12 +22,16 @@ def get_daily_image():
         result=json.load(file)
     return jsonify(result)
 
-@app.route("/get_image")
+@app.route("/get_image",methods=["GET","POST"])
 def get_image():
-    generate_image(SB=SB)
+   request_data=request.json
+   info=request_data.get("info")
+   
 
 
-    return "get_image"
+   return "get_image"
+generate_image(SB=SB)
 
 if __name__ == "__main__":
+    id=1
     app.run(host="0.0.0.0", port=80)

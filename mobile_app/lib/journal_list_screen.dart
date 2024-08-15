@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scrollable_list_tab_scroller/scrollable_list_tab_scroller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test2/journal_view_screen.dart';
 import 'detailed_info.dart';
 import 'journal_entry.dart';
 
@@ -57,10 +59,21 @@ class _JournalListScreenState extends State<JournalListScreen> {
           return ListView.builder(
               itemCount: journals.length,
               itemBuilder: (context, index) {
+                DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
                 String timeStamp = journals.keys.elementAt(index);
+                String newdate=formatter.format(DateTime.parse(timeStamp));
                 String journalEntry = journals[timeStamp]!;
-                return ListTile(
-                  title: Text(journalEntry),
+                return GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>JournalViewScreen(journalEntry: journalEntry)));
+                  },
+                  child: ListTile(
+                    title: Text(newdate),
+                    trailing:Icon(Icons.arrow_forward_ios,size: 15,) ,
+
+
+
+                  ),
                 );
               });
         },
