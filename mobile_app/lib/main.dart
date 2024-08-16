@@ -84,19 +84,43 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchImage() async {
     try {
       final response = await http.get(Uri.parse('$url/get_daily_image'));
-      print(response);
+
       if (response.statusCode == 200) {
         setState(() {
           Map result = jsonDecode(response.body);
           imageUrl = result["image"].toString().trim();
           dailyText=result["phrase"].toString();
         });
-
+      } else {
+        _showNotification();
       }
     } catch (E) {
       print(E);
+      _showNotification();
     }
   }
+  void _showNotification() {
+    // Show notification alerting user that the image could not be loaded
+    AlertDialog(
+        title: const Text('Image Load Error'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('Image could not be loaded. Please try again.'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          )
+        ]);
+  }
+
 
   void addingEntry(BuildContext context) async {
     final newentry = await Navigator.push(
@@ -146,27 +170,25 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontFamily: "DancingScript", fontSize: 32)),
         centerTitle: true,
       ),
-      body: Center(
-        child: SizedBox.expand(
-          child: imageUrl != null
-              ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Image.network(
-                        imageUrl!,
-                        fit: BoxFit.cover,
-                      ),
-                    SizedBox(height: 20,),
-                    Text(dailyText ?? "", style: TextStyle(fontSize: 20,fontFamily:"EduVICWANTBeginner" ),),
+      body: SingleChildScrollView(
+        child: imageUrl != null
+            ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Image.network(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                    ),
+                  SizedBox(height: 20,),
+                  Text(dailyText ?? "", style: TextStyle(fontSize: 20,fontFamily:"EduVICWANTBeginner" ),),
 
-                  ],
-                ),
-              )
-              : Container(
-                  color: Colors.cyan,
-                ),
-        ),
+                ],
+              ),
+            )
+            : Container(
+                color: Colors.cyan,
+              ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedLabelStyle:

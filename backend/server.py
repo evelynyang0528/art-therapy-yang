@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, request
 
 from storage_bucket_manager import StorageBucket
-from image_generator import generate_image, get_text
+from image_generator import generate_image, generate_journal_image, get_text
 
 
 app = Flask(__name__)
@@ -26,10 +26,10 @@ def get_daily_image():
 def get_image():
    request_data=request.json
    info=request_data.get("info")
-   
+   image=generate_journal_image(SB=SB,journal=info)
+   print(image)
+   return jsonify({"image": image})
 
-
-   return "get_image"
 generate_image(SB=SB)
 
 if __name__ == "__main__":

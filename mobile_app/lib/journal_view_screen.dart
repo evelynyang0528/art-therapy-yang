@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test2/journal_image_view_screen.dart';
 
 class JournalViewScreen extends StatefulWidget {
   const JournalViewScreen({super.key, required this.journalEntry});
@@ -24,6 +25,7 @@ class _JournalViewScreenState extends State<JournalViewScreen> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: ElevatedButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>JournalImageViewScreen(journalentry:widget.journalEntry)));
 
           }, child: Text("generate image"),),
         ),

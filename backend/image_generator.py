@@ -4,9 +4,7 @@ import random
 from openai import OpenAI
 import requests
 from PIL import Image
-
 from storage_bucket_manager import StorageBucket
-
 
 def get_text():
     chat_completion = client.chat.completions.create(
@@ -74,10 +72,11 @@ def generate_journal_image(SB,journal):
     image_response=requests.get(image_url)
     image=Image.open(BytesIO(image_response.content))
     id=random.randint(1, 100)
-    local_image_path=f"images/image{id}"
+
+    local_image_path=f"images/image{id}.jpg"
     image.save(local_image_path, "JPEG")
-    url=SB.uploadfile(f"images/img{id}.jpg",local_image_path)
-    result = {"image": url}
+    url=SB.uploadfile(f"journal_images/img{id}.jpg",local_image_path)
+    result =  url
     print(result)
     return result
     
