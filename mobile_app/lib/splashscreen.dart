@@ -3,8 +3,7 @@ import 'main.dart';
 import 'package:camera/camera.dart';
 
 class SplashScreen extends StatefulWidget {
-  final List<CameraDescription> cameras;
-  const SplashScreen({super.key, required this.cameras});
+  const SplashScreen({super.key, });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -21,10 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 4)).then((value) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => MyHomePage(
-            title: "",
-            cameras: widget.cameras,
-          ),
+          builder: (context) => RouterPage()
         ),
       );
     });

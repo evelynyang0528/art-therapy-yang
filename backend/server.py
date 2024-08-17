@@ -30,6 +30,20 @@ def get_image():
    print(image)
    return jsonify({"image": image})
 
+@app.route("/analyze_emotion_video",methods=["POST"])
+def analyze_emotion():
+    if "video" not in request.files:
+      return jsonify({"error": "no videos found"})
+    file=request.files["video"]
+    file_name=file.filename
+    local_path=f"{file_name}.mp4"
+    file.save(local_path)
+    # use the video to get emotion
+    emotion=get_emotion(local_path)
+    
+
+# for image
+
 generate_image(SB=SB)
 
 if __name__ == "__main__":

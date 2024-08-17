@@ -10,11 +10,8 @@ import 'package:camera/camera.dart';
 import 'journal_entry.dart';
 import 'package:http/http.dart' as http;
 
-late List<CameraDescription> _cameras;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _cameras = await availableCameras();
   runApp(const MyApp());
 }
 
@@ -29,20 +26,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    requestStoragePermission();
-  }
-
-  void requestStoragePermission() async {
-    if (!kIsWeb) {
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        await Permission.storage.request();
-      }
-      var cameraStatus = await Permission.camera.status;
-      if (!cameraStatus.isGranted) {
-        await Permission.camera.request();
-      }
-    }
   }
 
   @override
@@ -52,93 +35,26 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SplashScreen(
-        cameras: _cameras,
-      ),
+      home: SplashScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.cameras});
-
-  final String title;
-  final List<CameraDescription> cameras;
+class RouterPage extends StatefulWidget {
+  const RouterPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<RouterPage> createState() => _RouterPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    fetchImage();
-  }
+class _RouterPageState extends State<RouterPage> {
+  int selectedIndex = 1;
 
-  List<JournalEntry> journalEntry = [];
-
-  String? imageUrl;
-  String? dailyText;
-
-  Future<void> fetchImage() async {
-    try {
-      final response = await http.get(Uri.parse('$url/get_daily_image'));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          Map result = jsonDecode(response.body);
-          imageUrl = result["image"].toString().trim();
-          dailyText=result["phrase"].toString();
-        });
-      } else {
-        _showNotification();
-      }
-    } catch (E) {
-      print(E);
-      _showNotification();
-    }
-  }
-  void _showNotification() {
-    // Show notification alerting user that the image could not be loaded
-    AlertDialog(
-        title: const Text('Image Load Error'),
-        content: const SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('Image could not be loaded. Please try again.'),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          )
-        ]);
-  }
-
-
-  void addingEntry(BuildContext context) async {
-    final newentry = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => journalscreen(cameras: widget.cameras),
-      ),
-    );
-    if (newentry != null) {
-      setState(() {
-        journalEntry.add(newentry);
-      });
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const JournalListScreen()));
-    }
-  }
-
-  int selectedIndex = 0;
+  List<Widget> screens  = [
+    AddJournalScreen(),
+    MyHomePage(),
+    JournalListScreen(),
+  ];
 
   void _onItemTap(
     int index,
@@ -147,11 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => journalscreen(
-              cameras: widget.cameras,
-            ),
+            builder: (context) => AddJournalScreen(),
           ));
-      // addingentry(context);
+    } else if (index == 1) {
+      setState(() {
+
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const MyHomePage()));
+      });
     } else if (index == 2) {
       setState(() {
         selectedIndex = 2;
@@ -164,32 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Art Therapy",
-            style: TextStyle(fontFamily: "DancingScript", fontSize: 32)),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: imageUrl != null
-            ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Image.network(
-                      imageUrl!,
-                      fit: BoxFit.cover,
-                    ),
-                  SizedBox(height: 20,),
-                  Text(dailyText ?? "", style: TextStyle(fontSize: 20,fontFamily:"EduVICWANTBeginner" ),),
-
-                ],
-              ),
-            )
-            : Container(
-                color: Colors.cyan,
-              ),
-      ),
+      body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         unselectedLabelStyle:
             const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -214,7 +108,115 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blueGrey,
         unselectedItemColor: Colors.blueGrey,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({
+    super.key,
+  });
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    fetchImage();
+  }
+
+  List<JournalEntry> journalEntry = [];
+  bool isFetchingData = true;
+
+  String? imageUrl;
+  String? dailyText;
+
+  Future<void> fetchImage() async {
+    try {
+      final response = await http.get(Uri.parse('$url/get_daily_image'));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          Map result = jsonDecode(response.body);
+          imageUrl = result["image"].toString().trim();
+          dailyText = result["phrase"].toString();
+          isFetchingData = false;
+        });
+      } else {
+
+        print("Error *************************");
+        if (context.mounted) {
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to load!')),
+          );
+        }
+      }
+    } catch (E) {
+      print(E);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load!')),
+      );
+    }
+  }
+
+  void _showNotification() {
+    AlertDialog(
+        title: const Text('Image Load Error'),
+        content: Text('Image could not be loaded. Please try again.'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          )
+        ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text("Art Therapy",
+              style: TextStyle(fontFamily: "DancingScript", fontSize: 32)),
+          centerTitle: true,
+        ),
+        body: !isFetchingData
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Image.network(
+                        imageUrl ?? "",
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        dailyText ?? "",
+                        style: TextStyle(
+                            fontSize: 20, fontFamily: "EduVICWANTBeginner"),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container(
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ))
+
+        // This trailing comma makes auto-formatting nicer for build methods.
+        );
   }
 }
