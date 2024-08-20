@@ -1,1 +1,1 @@
-{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"Art has the power to heal, to reveal, to transform, to enlighten, to inspire, and to communicate. It speaks the language of the soul.\" - Cathy Malchiodi"}
+{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"The creation of art is not a hobby. It is a path to emotional wellness and healing.\" - Cathy Malchiodi"}

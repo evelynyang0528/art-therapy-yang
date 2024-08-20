@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test2/constant.dart';
+import 'package:test2/therapy_screen.dart';
 
 class JournalImageViewScreen extends StatefulWidget {
   const JournalImageViewScreen({super.key, required this.journalentry});
@@ -52,17 +53,23 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
       appBar: AppBar(
         title: const Text("Therapy"),
       ),
-      floatingActionButton: FloatingActionButton.extended(onPressed: (){},label: const Text("Start Therapy"),
-       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TherapyScreen()));
+        },
+        label: const Text("Start Therapy"),
+      ),
       body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: appimageurl == null
-              ? const Center(child: CircularProgressIndicator())
-              : Image.network(
-                  appimageurl!,
-                  fit: BoxFit.cover,
-                ),),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: appimageurl == null
+            ? const Center(child: CircularProgressIndicator())
+            : Image.network(
+                appimageurl!,
+                fit: BoxFit.cover,
+              ),
+      ),
     );
   }
 }

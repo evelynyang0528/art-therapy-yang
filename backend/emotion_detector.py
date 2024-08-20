@@ -35,19 +35,16 @@ def get_emotion(video_path):
  list_of_emotions = ["Angry","Disgust","Fear","Happy","Sad","Surprise","Neutral"]
  list_of_emotion_values = [angry,disgust,fear,happy,sad,surprise,neutral]
  
+
  # get the maximum value
- scores_comparison = pd.DataFrame(list_of_emotions,columns="human_emotions")
- scores_comparison["Emotion_values_from_the_videos"] = list_of_emotion_values
+ scores_comparison = pd.DataFrame(list_of_emotions,columns=["Human Emotions"])
+ scores_comparison["Emotion Value from the Video"] = list_of_emotion_values
  max_rows = scores_comparison[
-   scores_comparison["Emotion_values_from_the_videos"] ==
-     scores_comparison["Emotion_values_from_the_videos"].max()
+   scores_comparison["Emotion Value from the Video"] == scores_comparison["Emotion Value from the Video"].max()
  ]
- print("==============Completed=====================") 
- emotion = max_rows["human_emotions"].values[0]
+ print("=======================================Max Row=====")
+ print(max_rows) 
+ emotion = max_rows["Human Emotions"].values[0]
  return emotion
 
  
-emotion = get_emotion("sad_video.mp4")
-print("=========================================")
-print(emotion)
-print("=========================================")

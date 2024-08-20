@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:scrollable_list_tab_scroller/scrollable_list_tab_scroller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test2/journal_view_screen.dart';
+import 'package:test2/therapy_screen.dart';
 import 'detailed_info.dart';
 import 'journal_entry.dart';
 
@@ -65,7 +66,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
                 String journalEntry = journals[timeStamp]!;
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>JournalViewScreen(journalEntry: journalEntry)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TherapyScreen()));
                   },
                   child: ListTile(
                     title: Text(newdate),

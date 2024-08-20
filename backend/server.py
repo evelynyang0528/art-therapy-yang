@@ -1,6 +1,7 @@
 import json
 from flask import Flask, jsonify, request
 
+from emotion_detector import get_emotion
 from storage_bucket_manager import StorageBucket
 from image_generator import generate_image, generate_journal_image, get_text
 
@@ -40,6 +41,9 @@ def analyze_emotion():
     file.save(local_path)
     # use the video to get emotion
     emotion=get_emotion(local_path)
+
+    # return emotion
+    return jsonify({"emotion",emotion})
     
 
 # for image
