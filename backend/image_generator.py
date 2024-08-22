@@ -5,7 +5,6 @@ from openai import OpenAI
 import requests
 from PIL import Image
 from storage_bucket_manager import StorageBucket
-
 def get_text():
     chat_completion = client.chat.completions.create(
         messages=[

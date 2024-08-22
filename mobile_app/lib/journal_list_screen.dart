@@ -66,7 +66,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
                 String journalEntry = journals[timeStamp]!;
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TherapyScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>JournalViewScreen(journalEntry: journalEntry)));
                   },
                   child: ListTile(
                     title: Text(newdate),

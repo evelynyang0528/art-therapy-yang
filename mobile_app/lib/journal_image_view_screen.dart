@@ -15,7 +15,7 @@ class JournalImageViewScreen extends StatefulWidget {
 
 class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
   String imageurl = "$url/get_image";
-  String? appimageurl;
+  String appimageurl ="";
   @override
   void initState() {
     // TODO: implement initState
@@ -56,17 +56,17 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TherapyScreen()));
+              MaterialPageRoute(builder: (context) => TherapyScreen(therapyImage: appimageurl,)));
         },
         label: const Text("Start Therapy"),
       ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: appimageurl == null
+        child: appimageurl == ""
             ? const Center(child: CircularProgressIndicator())
             : Image.network(
-                appimageurl!,
+                appimageurl,
                 fit: BoxFit.cover,
               ),
       ),

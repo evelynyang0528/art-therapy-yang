@@ -18,6 +18,7 @@ def get_emotion(video_path):
   save_video=False,
   save_frames=False,
  ) 
+ 
  # converts analyze information to dataframes
  video_data_frame = input_video.to_pandas(analyzed_data) 
  video_data_frame = input_video.get_first_face(video_data_frame)

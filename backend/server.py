@@ -1,4 +1,5 @@
 import json
+import os
 from flask import Flask, jsonify, request
 
 from emotion_detector import get_emotion
@@ -42,8 +43,11 @@ def analyze_emotion():
     # use the video to get emotion
     emotion=get_emotion(local_path)
 
+    if os.path.exists(local_path):
+        os.remove(local_path)
+
     # return emotion
-    return jsonify({"emotion",emotion})
+    return jsonify({"emotion":emotion})
     
 
 # for image

@@ -1,1 +1,1 @@
-{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"The creation of art is not a hobby. It is a path to emotional wellness and healing.\" - Cathy Malchiodi"}
+{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"Art enables us to find ourselves and lose ourselves at the same time.\" - Thomas Merton"}
