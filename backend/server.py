@@ -1,13 +1,15 @@
 import json
 import os
 from flask import Flask, jsonify, request
-
+from flask_apscheduler import APScheduler
 from emotion_detector import get_emotion
 from storage_bucket_manager import StorageBucket
 from image_generator import generate_image, generate_journal_image, get_text
 
 
 app = Flask(__name__)
+scheduler = APScheduler()
+scheduler.api_enabled = True
 SB = StorageBucket()
 
 @app.route("/")
@@ -51,9 +53,16 @@ def analyze_emotion():
     
 
 # for image
-
-generate_image(SB=SB)
+def schedule_image():
+ generate_image(SB=SB)
 
 if __name__ == "__main__":
-    id=1
+    scheduler.add_job(
+        id="schedule_daily_image",
+        func=schedule_image,
+        trigger="interval",
+        minutes = 1
+    )
+    scheduler.init_app(app=app)
+    scheduler.start()
     app.run(host="0.0.0.0", port=80)

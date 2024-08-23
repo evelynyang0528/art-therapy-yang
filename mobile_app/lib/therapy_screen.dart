@@ -101,13 +101,21 @@ class _TherapyScreenState extends State<TherapyScreen> {
           centerTitle: true,
         ),
         body: emotion != ""
-            ? Column(
+            ? Stack(
                 children: [
-                  Image.network(
-                    widget.therapyImage,
-                    fit: BoxFit.cover,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Image.network(
+                      widget.therapyImage,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  Text(emotion,style: TextStyle(fontSize: 24),)
+                  Align( alignment: Alignment.bottomCenter,child: Container(
+                    margin: const EdgeInsets.all(60.0),
+                    color: Colors.grey.shade100,
+                    child: Text("your emotion: $emotion",style: TextStyle(fontSize: 24),),
+                  ))
                 ],
               )
             : SingleChildScrollView(

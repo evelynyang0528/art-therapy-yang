@@ -5,6 +5,7 @@ from openai import OpenAI
 import requests
 from PIL import Image
 from storage_bucket_manager import StorageBucket
+
 def get_text():
     chat_completion = client.chat.completions.create(
         messages=[
@@ -27,19 +28,18 @@ def generate_image(SB):
         "Create an image designed to visually convey and enhance mental health awareness and serve as a "
         "therapeutic tool"
     )
-    # response_image = client.images.generate(
-    #     model="dall-e-3",
-    #     prompt=prompt,
-    #     size="1024x1024",
-    #     quality="standard",
-    #     n=1,
-    # )
-    # image_url=response_image.data[0].url
-    # response=requests.get(image_url)
-    # img = Image.open(BytesIO(response.content))
+    response_image = client.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024",
+        quality="standard",
+        n=1,
+    )
+    image_url=response_image.data[0].url
+    response=requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
     local_image_path = "daily_img.jpg"
-    # img.save(local_image_path, "JPEG")
-
+    img.save(local_image_path, "JPEG")
    
     url=SB.uploadfile("images/daily_image.jpg",local_image_path)
     text=get_text()
