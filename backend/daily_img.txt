@@ -1,1 +1,1 @@
-{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"Art making is a wonderful way of expressing thoughts and feelings that are too painful to put into words. It allows for the direct communication of emotions, making them visible and concrete, rather than hidden and abstract.\" - Cathy Malchiodi"}
+{"image": "https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/images/daily_image.jpg", "phrase": "\"Art can wash from the soul the dust of everyday life.\" - Pablo Picasso, artist"}

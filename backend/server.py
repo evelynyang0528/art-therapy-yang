@@ -2,6 +2,7 @@ import json
 import os
 from flask import Flask, jsonify, request
 from flask_apscheduler import APScheduler
+from audio_generator import generate_music, generate_prompt
 from emotion_detector import get_emotion
 from storage_bucket_manager import StorageBucket
 from image_generator import generate_image, generate_journal_image, get_text
@@ -11,6 +12,10 @@ app = Flask(__name__)
 scheduler = APScheduler()
 scheduler.api_enabled = True
 SB = StorageBucket()
+
+
+
+
 
 @app.route("/")
 def hello_world():
@@ -50,18 +55,30 @@ def analyze_emotion():
 
     # return emotion
     return jsonify({"emotion":emotion})
+
+
+
+@app.route("/generate_audio",methods=["GET","POST"]) 
+def generate_audio():
     
+    request_data=request.json
+    journal=request_data.get("journal")
+    audio_prompt= generate_prompt(journal)
+    duration = 15
+    audiourl=generate_music(audio_prompt,duration,audio_prompt,SB=SB)
+    return jsonify({"music_url": audiourl})
+
 
 # for image
 def schedule_image():
- generate_image(SB=SB)
+  generate_image(SB=SB)
 
 if __name__ == "__main__":
     scheduler.add_job(
         id="schedule_daily_image",
         func=schedule_image,
         trigger="interval",
-        minutes = 1
+        hours = 24,
     )
     scheduler.init_app(app=app)
     scheduler.start()

@@ -4,7 +4,9 @@ import random
 from openai import OpenAI
 import requests
 from PIL import Image
+from audio_generator import get_client
 from storage_bucket_manager import StorageBucket
+client = get_client()
 
 def get_text():
     chat_completion = client.chat.completions.create(
@@ -48,6 +50,7 @@ def generate_image(SB):
         "image":url,
         "phrase":text
         }
+  
     with open("daily_img.txt", "w") as file:
         file.write(json.dumps(response))
 
@@ -78,7 +81,13 @@ def generate_journal_image(SB,journal):
     result =  url
     print(result)
     return result
-    
+
+
+if __name__ == "__main__":
+    SB = StorageBucket(
+
+    )
+    generate_image(SB=SB)
 
 
 
