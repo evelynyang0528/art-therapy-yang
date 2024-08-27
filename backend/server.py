@@ -60,10 +60,10 @@ def analyze_emotion():
 
 @app.route("/generate_audio",methods=["GET","POST"]) 
 def generate_audio():
-    
     request_data=request.json
     journal=request_data.get("journal")
-    audio_prompt= generate_prompt(journal)
+    print(journal)
+    audio_prompt="Smooth music" #generate_prompt(journal)
     duration = 15
     audiourl=generate_music(audio_prompt,duration,audio_prompt,SB=SB)
     return jsonify({"music_url": audiourl})

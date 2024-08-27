@@ -4,9 +4,17 @@ import random
 from openai import OpenAI
 import requests
 from PIL import Image
-from audio_generator import get_client
+
 from storage_bucket_manager import StorageBucket
-client = get_client()
+
+with open("api_key.json") as f:
+     API_KEY= json.load(f)
+
+openai_key = API_KEY["openAI_api_key"]
+
+client = OpenAI(
+    api_key=openai_key
+)
 
 def get_text():
     chat_completion = client.chat.completions.create(
