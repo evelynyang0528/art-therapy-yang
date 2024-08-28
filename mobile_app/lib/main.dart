@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:test2/music_page.dart';
+
 import 'constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +54,8 @@ class _RouterPageState extends State<RouterPage> {
 
   List<Widget> screens  = [
     AddJournalScreen(),
-    MyHomePage(),
+    // MyHomePage(),
+    MusicPage(info: "I feel sad "),
     JournalListScreen(),
   ];
 
