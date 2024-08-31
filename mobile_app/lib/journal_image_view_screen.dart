@@ -51,15 +51,14 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Therapy"),
+        backgroundColor: Colors.white,
+        title:  Text(
+          "Therapy",
+          style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
+        ),
+        centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TherapyScreen(therapyImage: appimageurl,)));
-        },
-        label: const Text("Start Therapy"),
-      ),
+
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

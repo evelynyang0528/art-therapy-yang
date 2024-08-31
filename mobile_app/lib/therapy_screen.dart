@@ -97,7 +97,20 @@ class _TherapyScreenState extends State<TherapyScreen> {
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
-          title: Text("Video Therapy"),
+          backgroundColor: Colors.white,
+          toolbarHeight: 100,
+          title:  const Column(
+            children: [
+              Text(
+                "Art Therapy",
+                style: TextStyle(fontFamily: "DancingScript", fontSize: 32),
+
+              ),
+              SizedBox(height: 10,),
+
+              Text( "Video Therapy",style: TextStyle(fontSize: 18), )
+            ],
+          ),
           centerTitle: true,
         ),
         body: emotion != ""

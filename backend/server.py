@@ -63,9 +63,9 @@ def generate_audio():
     request_data=request.json
     journal=request_data.get("journal")
     print(journal)
-    audio_prompt="Smooth music" #generate_prompt(journal)
+    audio_prompt="Smoth music" #generate_prompt(journal)
     duration = 15
-    audiourl=generate_music(audio_prompt,duration,audio_prompt,SB=SB)
+    audiourl="https://storage.googleapis.com/art-therapy-d7fb6.appspot.com/Smothmusic.mp3"#generate_music(audio_prompt,duration,audio_prompt,SB=SB)
     return jsonify({"music_url": audiourl})
 
 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         id="schedule_daily_image",
         func=schedule_image,
         trigger="interval",
-        hours = 24,
+        minutes = 1,
     )
     scheduler.init_app(app=app)
     scheduler.start()

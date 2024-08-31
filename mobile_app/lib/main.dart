@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:test2/custom_widget.dart';
 import 'package:test2/music_page.dart';
 
+import 'Therapy_screen.dart';
 import 'constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,43 +52,28 @@ class RouterPage extends StatefulWidget {
 }
 
 class _RouterPageState extends State<RouterPage> {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
 
-  List<Widget> screens  = [
+  List<Widget> screens = [
+    MyHomePage(),
     AddJournalScreen(),
-    // MyHomePage(),
-    MusicPage(info: "I feel sad "),
     JournalListScreen(),
+    TherapyScreen(
+      therapyImage: "appimageurl",
+    ),
+
   ];
 
-  void _onItemTap(
-    int index,
-  ) {
-    if (index == 0) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddJournalScreen(),
-          ));
-    } else if (index == 1) {
-      setState(() {
-
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MyHomePage()));
-      });
-    } else if (index == 2) {
-      setState(() {
-        selectedIndex = 2;
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const JournalListScreen()));
-      });
-    }
+  void _onItemTap(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[selectedIndex],
+      body: screens.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         unselectedLabelStyle:
             const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -94,17 +81,22 @@ class _RouterPageState extends State<RouterPage> {
             const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle),
-            label: "add",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "home",
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle),
+            label: "add",
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.description),
             label: "journals",
-          )
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.video_camera_front_outlined),
+            label: "video therapy",
+          ),
+
         ],
         currentIndex: selectedIndex,
         onTap: _onItemTap,
@@ -133,13 +125,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<JournalEntry> journalEntry = [];
-  bool isFetchingData = true;
+  // bool isFetchingData = false;
 
-  String? imageUrl;
+  String imageUrl = "";
   String? dailyText;
 
   Future<void> fetchImage() async {
     try {
+
       final response = await http.get(Uri.parse('$url/get_daily_image'));
 
       if (response.statusCode == 200) {
@@ -147,39 +140,39 @@ class _MyHomePageState extends State<MyHomePage> {
           Map result = jsonDecode(response.body);
           imageUrl = result["image"].toString().trim();
           dailyText = result["phrase"].toString();
-          isFetchingData = false;
+
         });
       } else {
-
         print("Error *************************");
-        if (context.mounted) {
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to load!')),
-          );
-        }
+          _showNotification();
       }
     } catch (E) {
       print(E);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load!')),
-      );
+      _showNotification();
     }
   }
 
   void _showNotification() {
-    AlertDialog(
-        title: const Text('Image Load Error'),
-        content: Text('Image could not be loaded. Please try again.'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('OK'),
-            onPressed: () {
+    showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+          title: const Text('Image Load Error'),
+          content: const Text('Image could not be loaded. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(onPressed:(){
               Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-          )
-        ]);
+              fetchImage();
+
+            }, child:const Text("Retry"))
+
+          ]);
+    });
+
   }
 
   @override
@@ -187,11 +180,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text("Art Therapy",
-              style: TextStyle(fontFamily: "DancingScript", fontSize: 32)),
+          title:  Text(
+            "Art Therapy",
+            style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
+          ),
           centerTitle: true,
         ),
-        body: !isFetchingData
+        body: imageUrl.isNotEmpty
             ? SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

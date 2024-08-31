@@ -41,9 +41,23 @@ class _JournalListScreenState extends State<JournalListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("past entries"),
+      appBar:  AppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: 80,
+        title:  Column(
+          children: [
+            Text(
+              "Art Therapy",
+              style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
+
+            ),
+            SizedBox(height: 10,),
+            Text( "Journal List",style: TextStyle(fontSize: 18), )
+          ],
+        ),
+        centerTitle: true,
       ),
+
       body: FutureBuilder(
         future: getJournals(),
         builder: (BuildContext context,
@@ -62,18 +76,22 @@ class _JournalListScreenState extends State<JournalListScreen> {
               itemBuilder: (context, index) {
                 DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
                 String timeStamp = journals.keys.elementAt(index);
-                String newdate=formatter.format(DateTime.parse(timeStamp));
+                String newdate = formatter.format(DateTime.parse(timeStamp));
                 String journalEntry = journals[timeStamp]!;
                 return GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>JournalViewScreen(journalEntry: journalEntry)));
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                JournalViewScreen(journalEntry: journalEntry)));
                   },
                   child: ListTile(
                     title: Text(newdate),
-                    trailing:Icon(Icons.arrow_forward_ios,size: 15,) ,
-
-
-
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                    ),
                   ),
                 );
               });

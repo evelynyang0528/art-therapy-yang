@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
@@ -75,10 +76,42 @@ class AudioPlayerScreen extends StatefulWidget {
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   final player = AudioPlayer();
   PlayerState? _playerState;
+  Duration? _duration;
+  Duration? _position;
+
+  StreamSubscription? durationSubscription;
+  StreamSubscription? positionSubscription;
+  StreamSubscription? playerCompleteSubscription;
+  StreamSubscription? playerStateChangeSubscription;
 
   bool get _isPlaying => _playerState == PlayerState.playing;
   bool get _isPaused => _playerState == PlayerState.paused;
   bool get _isStopped => _playerState == PlayerState.stopped;
+  String get _positionText=> _position.toString().split(".").first ?? "";
+  String get _durationText=> _duration.toString().split(".").first ?? "";
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    player.setSource(UrlSource(widget.audioUrl));
+    _playerState = player.state;
+    player.getDuration().then((durationValue) {
+      setState(() {
+        _duration = durationValue;
+      });
+    });
+
+    player.getCurrentPosition().then((value) {
+      setState(() {
+        _position = value;
+      });
+    });
+
+    initStreams();
+  }
 
   playAudio() async {
     // if(_playerState==PlayerState.completed || _playerState == PlayerState.stopped) {
@@ -97,23 +130,69 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
     });
   }
 
+  initStreams() {
+    durationSubscription = player.onDurationChanged.listen((duration) {
+      setState(() {
+        _duration = duration;
+      });
+    });
+    positionSubscription = player.onPositionChanged.listen((position) {
+      setState(() {
+        _position = position;
+      });
+    });
+    playerCompleteSubscription = player.onPlayerComplete.listen((event) {
+      setState(() {
+        _playerState = PlayerState.stopped;
+        _position = Duration.zero;
+      });
+    });
+    playerStateChangeSubscription = player.onPlayerStateChanged.listen((event) {
+      setState(() {
+        _playerState = event;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _isPlaying
-            ? IconButton(onPressed: () {}, icon: Icon(Icons.pause))
+            ? IconButton(
+                onPressed: _isPlaying ? pauseAudio : null,
+                icon: Icon(
+                  Icons.pause,
+                  size: 40,
+                ))
             : IconButton(
-                  icon: Icon(Icons.play_arrow),
-                  onPressed: _isPlaying ? null : playAudio),
-
-        IconButton(
-          icon: Icon(Icons.stop),
-          onPressed: () {
-            playAudio();
+                icon: Icon(
+                  Icons.play_arrow,
+                  size: 40,
+                ),
+                onPressed: _isPlaying ? null : playAudio),
+        Slider(
+          thumbColor: Colors.black,
+          activeColor: Colors.black54,
+          value: (_position != null &&
+                  _duration != null &&
+                  _position!.inMilliseconds > 0 &&
+                  _position!.inMilliseconds < _duration!.inMilliseconds)
+              ? _position!.inMilliseconds / _duration!.inMilliseconds
+              : 0.0,
+          onChanged: (value) {
+            final duration = _duration;
+            if (duration == null) return;
+            final position = value * duration.inMilliseconds;
+            player.seek(Duration(milliseconds: position.round()));
           },
         ),
+        Text(_position!=null ?
+        "$_positionText / $_durationText":
+            _duration!=null?
+                _durationText:""
+        )
       ],
     );
   }

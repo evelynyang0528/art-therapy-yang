@@ -26,8 +26,14 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
   @override
   void initState() {
     super.initState();
+    _textcontroller.addListener(checkText);
   }
 
+  void checkText () {
+    if (_textcontroller.text.isNotEmpty){
+      print(_textcontroller.text);
+    }
+  }
   // save the journal to the user device.
   saveJournal() async {
     String text = _textcontroller.text;
@@ -56,7 +62,18 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text("add entry"),
+         toolbarHeight: 80,
+          title:  const Column(
+            children: [
+              Text(
+                "Art Therapy",
+                style: TextStyle(fontFamily: "DancingScript", fontSize: 32)
+              ),
+              SizedBox(height: 10,),
+              Text("Add Entry",style: TextStyle(fontSize: 18), )
+            ],
+          ),
+          centerTitle: true,
         ),
         body: Stack(
           children: [
@@ -65,38 +82,30 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 160),
+                  const SizedBox(height: 160),
                   const Text(
                     "Please Enter How You Feel?",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                       ),
                       controller: _textcontroller,
+
                       maxLines: 5,
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Please Add Photos Here",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        saveJournal();
-                      },
+                      onPressed: _textcontroller.text.isNotEmpty ? saveJournal() : null,
+
                       child: Text("Add Entry"))
                 ],
               ),

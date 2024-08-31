@@ -7,6 +7,7 @@ import subprocess
 from openai import OpenAI
 
 import replicate
+import requests
 
 from storage_bucket_manager import StorageBucket
 
@@ -42,30 +43,29 @@ def generate_prompt(text):
 
 
 def generate_music(audio_prompt,duration,prompt,SB):
-     #  audio_url = replicate.run(
-     #    "meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb",
-     #    input={
-     #        "top_k": 250,
-     #        "top_p": 0,
-     #        "prompt": audio_prompt,
-     #        "duration": duration,
-     #        "temperature": 1,
-     #        "continuation": False,
-     #        "model_version": "stereo-large",
-     #        "output_format": "mp3",
-     #        "continuation_start": 0,
-     #        "multi_band_diffusion": False,
-     #        "normalization_strategy": "peak",
-     #        "classifier_free_guidance": 3
-     #    }
-     #   )
-     #  print(audio_url)
-     audio_url = "https://replicate.delivery/yhqm/HAfZraNP0pR9FSYhQ1WkQqLGeful9JZpGFZ0X02WhhSf0EbNB/out.mp3"
+     audio_url = replicate.run(
+        "meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb",
+        input={
+            "top_k": 250,
+            "top_p": 0,
+            "prompt": audio_prompt,
+            "duration": duration,
+            "temperature": 1,
+            "continuation": False,
+            "model_version": "stereo-large",
+            "output_format": "mp3",
+            "continuation_start": 0,
+            "multi_band_diffusion": False,
+            "normalization_strategy": "peak",
+            "classifier_free_guidance": 3
+          }
+     )
+     print(audio_url)
      downloaded_song = download_song(audio_url,prompt)
    
      music_url=upload_to_SB(downloaded_song,SB)
-     
-     delete_music(audio_path=downloaded_song)
+     print(music_url)
+     # delete_music(audio_path=downloaded_song)
      return music_url
 
 
@@ -85,6 +85,14 @@ def upload_to_SB(downloaded_song, SB : StorageBucket):
 def download_song(audiourl,description):
      description = re.sub(r'[^a-zA-Z]', '', description)[:15]
      local_file=f"{description}.mp3"
-     urllib.request.urlretrieve(audiourl, local_file)
+     # subprocess.run(["curl", audiourl, "-k", "-o", local_file])
+     print(local_file,"--------------")
+     response = requests.get(audiourl)
+     if response.status_code == 200:
+          with open (local_file,'wb') as file:
+               file.write(response.content)
+     else :
+          print("Failed to download.-------------------")           
+      
      return local_file
      
