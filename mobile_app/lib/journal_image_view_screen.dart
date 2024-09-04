@@ -15,7 +15,7 @@ class JournalImageViewScreen extends StatefulWidget {
 
 class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
   String imageurl = "$url/get_image";
-  String appimageurl ="";
+  String appimageurl = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -50,24 +50,46 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title:  Text(
-          "Therapy",
-          style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //
+      //   centerTitle: true,
+      // ),
 
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+      body: SafeArea(
         child: appimageurl == ""
             ? const Center(child: CircularProgressIndicator())
-            : Image.network(
-                appimageurl,
-                fit: BoxFit.cover,
-              ),
+            : Stack(
+              children: [
+                GestureDetector(
+                  onTap:(){Navigator.of(context).pop();} ,
+                  child: Container(
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.arrow_back),),
+                ),
+                InteractiveViewer(
+                          boundaryMargin: EdgeInsets.all(8),
+                          minScale: 0.1,
+                          maxScale: 1.6,
+                  child: OverflowBox(
+                    maxWidth: 1024,
+                    maxHeight: 1024,
+
+                        child: Image.network(
+                            fit: BoxFit.contain,
+                            appimageurl),
+                      ),
+                    ),
+
+
+              ],
+            ),
+
       ),
     );
   }

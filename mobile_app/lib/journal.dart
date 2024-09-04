@@ -22,17 +22,19 @@ class AddJournalScreen extends StatefulWidget {
 
 class _AddJournalScreenState extends State<AddJournalScreen> {
   final TextEditingController _textcontroller = TextEditingController();
+  var isButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
-    _textcontroller.addListener(checkText);
   }
 
-  void checkText () {
-    if (_textcontroller.text.isNotEmpty){
-      print(_textcontroller.text);
-    }
+  void _onChangeText(String text) {
+      if (text.length > 1){
+        setState(() {
+          isButtonEnabled = text.isNotEmpty;
+        });
+      }
   }
   // save the journal to the user device.
   saveJournal() async {
@@ -96,7 +98,7 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
                         border: OutlineInputBorder(),
                       ),
                       controller: _textcontroller,
-
+                      onChanged:_onChangeText,
                       maxLines: 5,
                     ),
                   ),
@@ -104,9 +106,8 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed: _textcontroller.text.isNotEmpty ? saveJournal() : null,
-
-                      child: Text("Add Entry"))
+                      onPressed:isButtonEnabled ? saveJournal : null,
+                      child: Text("Add Entry"),)
                 ],
               ),
             ),
