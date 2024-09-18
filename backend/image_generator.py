@@ -4,7 +4,6 @@ import random
 from openai import OpenAI
 import requests
 from PIL import Image
-
 from storage_bucket_manager import StorageBucket
 
 with open("api_key.json") as f:
@@ -74,7 +73,7 @@ def generate_journal_image(SB,journal):
     response_image = client.images.generate(
         model="dall-e-3",
         prompt=prompt,
-        size="1024x1024",
+        size="1920x2880",
         quality="standard",
         n=1,
     )

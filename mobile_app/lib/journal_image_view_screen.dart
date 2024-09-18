@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test2/constant.dart';
+import 'package:test2/music_page.dart';
 import 'package:test2/therapy_screen.dart';
 
 class JournalImageViewScreen extends StatefulWidget {
@@ -50,46 +51,40 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //
-      //   centerTitle: true,
-      // ),
-
       body: SafeArea(
         child: appimageurl == ""
             ? const Center(child: CircularProgressIndicator())
             : Stack(
-              children: [
-                GestureDetector(
-                  onTap:(){Navigator.of(context).pop();} ,
-                  child: Container(
-                    margin: EdgeInsets.all(8),
-                    padding: EdgeInsets.all(8),
+                children: [
+                  Container(
+                    //  width: MediaQuery.of(context).size.width * 2,
+                    height: MediaQuery.of(context).size.height * 2,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: NetworkImage(appimageurl), fit: BoxFit.cover),
                     ),
-                    child: Icon(Icons.arrow_back),),
-                ),
-                InteractiveViewer(
-                          boundaryMargin: EdgeInsets.all(8),
-                          minScale: 0.1,
-                          maxScale: 1.6,
-                  child: OverflowBox(
-                    maxWidth: 1024,
-                    maxHeight: 1024,
-
-                        child: Image.network(
-                            fit: BoxFit.contain,
-                            appimageurl),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        shape: BoxShape.circle,
                       ),
+                      child: Icon(Icons.arrow_back),
                     ),
-
-
-              ],
-            ),
-
+                  ),
+                  Positioned(
+                      bottom:20.0,
+                      child: Container(
+                        color: Colors.transparent,
+                          child: MusicPage(info: widget.journalentry)))
+                ],
+              ),
       ),
     );
   }

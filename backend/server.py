@@ -78,7 +78,7 @@ if __name__ == "__main__":
         id="schedule_daily_image",
         func=schedule_image,
         trigger="interval",
-        hours = 1,
+        hours = 12,
     )
     scheduler.init_app(app=app)
     scheduler.start()

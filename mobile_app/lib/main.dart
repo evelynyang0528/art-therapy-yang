@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:test2/custom_widget.dart';
 import 'package:test2/music_page.dart';
 
@@ -75,26 +77,27 @@ class _RouterPageState extends State<RouterPage> {
     return Scaffold(
       body: screens.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels : true,
         unselectedLabelStyle:
-            const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
         selectedLabelStyle:
-            const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "home",
+            label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle),
-            label: "add",
+            label: "Add",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.description),
-            label: "journals",
+            label: "Journals",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.video_camera_front_outlined),
-            label: "video therapy",
+            label: "Therapy",
           ),
 
         ],
@@ -174,7 +177,76 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
   }
+  checkPermission(){
+    Permission.photos.status;
+  }
 
+  Future<bool> requestPermission() async {
+
+    final deviceInfo = DeviceInfoPlugin();
+    final androidInfo = await deviceInfo.androidInfo;
+    final androidVersion = androidInfo.version.sdkInt;
+    bool granted;
+    print("==================Requesting==================");
+    if (androidVersion >= 33) {
+      granted = await Permission.photos.request().isGranted;
+    } else {
+      granted = await Permission.storage.request().isGranted;
+    }
+    return granted;
+  }
+
+  downloadToDevice() async {
+    try {
+      print('Downloading image from $imageUrl');
+      var response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode == 200) {
+        print('Image downloaded successfully');
+        final result = await ImageGallerySaver.saveImage(
+          Uint8List.fromList(response.bodyBytes),
+          quality: 100,
+          name: "daily_image_${DateTime.now().toIso8601String()}",
+        );
+        print('Image save result: $result');
+
+      } else {
+        print('Failed to download image: ${response.statusCode}');
+
+      }
+    } catch (e) {
+      print('Error saving image: $e');
+
+    }
+  }
+
+
+
+
+  void askToDownloadImage(){
+    showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        content: const Text('Do you want to save this image?'),
+        actions:<Widget>[
+          TextButton(
+            child: const Text('Save to album'),
+            onPressed: () async{
+              Navigator.of(context).pop();
+             bool granted = await requestPermission();
+             if (granted) {
+               downloadToDevice();
+             } else {
+               print("=================Permission not granted");
+             }
+              },
+          ),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          },
+           child: const Text('Cancel'))
+        ],
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,9 +264,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Image.network(
-                        imageUrl ?? "",
-                        fit: BoxFit.cover,
+                      GestureDetector(
+                        onLongPress: (){
+                          askToDownloadImage();
+                        },
+                        child: Image.network(
+                          imageUrl ?? "",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       SizedBox(
                         height: 20,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test2/journal_list_screen.dart';
 import 'image_view_page.dart';
 import 'package:path/path.dart' show join;
 import 'journal_entry.dart';
@@ -49,9 +50,17 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
     timeStamps.add(timeStamp);
     await sharedPreferences.setStringList("j_timestamps", timeStamps);
 
+    setState(() {
+      _textcontroller.text = "";
+    });
+
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Journal saved successfully!')),
+      );
+
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) =>  JournalListScreen())
       );
     }
 

@@ -51,14 +51,13 @@ class _MusicPageState extends State<MusicPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: musicUrl.isNotEmpty
+    return
+        musicUrl.isNotEmpty
           ? AudioPlayerScreen(
               audioUrl: musicUrl,
             )
-          : const CircularProgressIndicator(),
-    ));
+          : const CircularProgressIndicator();
+
   }
 }
 
@@ -165,11 +164,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 icon: Icon(
                   Icons.pause,
                   size: 40,
+
                 ))
             : IconButton(
                 icon: Icon(
                   Icons.play_arrow,
                   size: 40,
+                  color: Colors.black,
                 ),
                 onPressed: _isPlaying ? null : playAudio),
         Slider(
