@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:test2/constant.dart';
+import 'package:test2/download_manager.dart';
 import 'package:test2/music_page.dart';
 import 'package:test2/therapy_screen.dart';
 
@@ -45,23 +46,50 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
           appimageurl = image;
         });
       }
-    } catch (error) {}
+    } catch (error) {
+     await  Future.delayed(const Duration(seconds: 3));
+      Navigator.of(context).pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Row(
+          children: [
+            Icon(
+              Icons.dangerous,
+              color: Colors.red,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text('image failed to download'),
+          ],
+        )));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    DownloadManager downloadManager =
+        DownloadManager(imageUrl: appimageurl, context: context);
+
     return Scaffold(
       body: SafeArea(
         child: appimageurl == ""
             ? const Center(child: CircularProgressIndicator())
             : Stack(
                 children: [
-                  Container(
-                    //  width: MediaQuery.of(context).size.width * 2,
-                    height: MediaQuery.of(context).size.height * 2,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(appimageurl), fit: BoxFit.cover),
+                  GestureDetector(
+                    onLongPress: () {
+                      downloadManager.askToDownloadImage();
+                    },
+                    child: Container(
+                      //  width: MediaQuery.of(context).size.width * 2,
+                      height: MediaQuery.of(context).size.height * 2,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(appimageurl),
+                            fit: BoxFit.cover),
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -79,9 +107,9 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
                     ),
                   ),
                   Positioned(
-                      bottom:20.0,
+                      bottom: 20.0,
                       child: Container(
-                        color: Colors.transparent,
+                          color: Colors.transparent,
                           child: MusicPage(info: widget.journalentry)))
                 ],
               ),

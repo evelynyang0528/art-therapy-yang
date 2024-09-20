@@ -70,10 +70,11 @@ def generate_journal_image(SB,journal):
         f"aim to evoke positive emotions and provide comfort, making it a valuable resource for mental health"
         f" awareness and support."
     )
+    
     response_image = client.images.generate(
         model="dall-e-3",
         prompt=prompt,
-        size="1920x2880",
+        size="1024x1024",
         quality="standard",
         n=1,
     )

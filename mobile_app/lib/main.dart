@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:test2/custom_widget.dart';
+import 'package:test2/download_manager.dart';
 import 'package:test2/music_page.dart';
 
 import 'Therapy_screen.dart';
@@ -63,7 +64,6 @@ class _RouterPageState extends State<RouterPage> {
     TherapyScreen(
       therapyImage: "appimageurl",
     ),
-
   ];
 
   void _onItemTap(int index) {
@@ -77,7 +77,7 @@ class _RouterPageState extends State<RouterPage> {
     return Scaffold(
       body: screens.elementAt(selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels : true,
+        showUnselectedLabels: true,
         unselectedLabelStyle:
             const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
         selectedLabelStyle:
@@ -99,7 +99,6 @@ class _RouterPageState extends State<RouterPage> {
             icon: Icon(Icons.video_camera_front_outlined),
             label: "Therapy",
           ),
-
         ],
         currentIndex: selectedIndex,
         onTap: _onItemTap,
@@ -128,14 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<JournalEntry> journalEntry = [];
-  // bool isFetchingData = false;
 
   String imageUrl = "";
   String? dailyText;
 
   Future<void> fetchImage() async {
     try {
-
       final response = await http.get(Uri.parse('$url/get_daily_image'));
 
       if (response.statusCode == 200) {
@@ -143,11 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Map result = jsonDecode(response.body);
           imageUrl = result["image"].toString().trim();
           dailyText = result["phrase"].toString();
-
         });
       } else {
         print("Error *************************");
-          _showNotification();
+        _showNotification();
       }
     } catch (E) {
       print(E);
@@ -156,103 +152,42 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showNotification() {
-    showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-          title: const Text('Image Load Error'),
-          content: const Text('Image could not be loaded. Please try again.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(onPressed:(){
-              Navigator.of(context).pop();
-              fetchImage();
-
-            }, child:const Text("Retry"))
-
-          ]);
-    });
-
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Image Load Error'),
+              content:
+                  const Text('Image could not be loaded. Please try again.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      fetchImage();
+                    },
+                    child: const Text("Retry"))
+              ]);
+        });
   }
-  checkPermission(){
+
+  checkPermission() {
     Permission.photos.status;
   }
 
-  Future<bool> requestPermission() async {
-
-    final deviceInfo = DeviceInfoPlugin();
-    final androidInfo = await deviceInfo.androidInfo;
-    final androidVersion = androidInfo.version.sdkInt;
-    bool granted;
-    print("==================Requesting==================");
-    if (androidVersion >= 33) {
-      granted = await Permission.photos.request().isGranted;
-    } else {
-      granted = await Permission.storage.request().isGranted;
-    }
-    return granted;
-  }
-
-  downloadToDevice() async {
-    try {
-      print('Downloading image from $imageUrl');
-      var response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode == 200) {
-        print('Image downloaded successfully');
-        final result = await ImageGallerySaver.saveImage(
-          Uint8List.fromList(response.bodyBytes),
-          quality: 100,
-          name: "daily_image_${DateTime.now().toIso8601String()}",
-        );
-        print('Image save result: $result');
-
-      } else {
-        print('Failed to download image: ${response.statusCode}');
-
-      }
-    } catch (e) {
-      print('Error saving image: $e');
-
-    }
-  }
-
-
-
-
-  void askToDownloadImage(){
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        content: const Text('Do you want to save this image?'),
-        actions:<Widget>[
-          TextButton(
-            child: const Text('Save to album'),
-            onPressed: () async{
-              Navigator.of(context).pop();
-             bool granted = await requestPermission();
-             if (granted) {
-               downloadToDevice();
-             } else {
-               print("=================Permission not granted");
-             }
-              },
-          ),
-          TextButton(onPressed: () {
-            Navigator.of(context).pop();
-          },
-           child: const Text('Cancel'))
-        ],
-      );
-    });
-  }
   @override
   Widget build(BuildContext context) {
+    DownloadManager downloadManager =
+        DownloadManager(imageUrl: imageUrl, context: context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title:  Text(
+          title: Text(
             "Art Therapy",
             style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
           ),
@@ -265,8 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onLongPress: (){
-                          askToDownloadImage();
+                        onLongPress: () {
+                          downloadManager.askToDownloadImage();
                         },
                         child: Image.network(
                           imageUrl ?? "",
