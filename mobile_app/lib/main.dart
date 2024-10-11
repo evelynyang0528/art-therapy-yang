@@ -1,15 +1,20 @@
 import 'dart:convert';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:test2/chat_screen.dart';
 import 'package:test2/custom_widget.dart';
 import 'package:test2/download_manager.dart';
+import 'package:test2/login_screen.dart';
 import 'package:test2/music_page.dart';
+import 'package:test2/sign_up_screen.dart';
 
 import 'Therapy_screen.dart';
 import 'constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'firebase_options.dart';
 import 'journal_list_screen.dart';
 import 'splashscreen.dart';
 import 'journal.dart';
@@ -19,6 +24,9 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -59,12 +67,16 @@ class _RouterPageState extends State<RouterPage> {
 
   List<Widget> screens = [
     MyHomePage(),
-    AddJournalScreen(),
     JournalListScreen(),
+    AddJournalScreen(),
     TherapyScreen(
       therapyImage: "appimageurl",
     ),
+    // const ChatScreen()
+    // LoginScreen()
+    SignUpScreen(),
   ];
+
 
   void _onItemTap(int index) {
     setState(() {
@@ -88,16 +100,20 @@ class _RouterPageState extends State<RouterPage> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle),
-            label: "Add",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.description),
             label: "Journals",
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle),
+            label: "Add",
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.video_camera_front_outlined),
             label: "Therapy",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: "Chat",
           ),
         ],
         currentIndex: selectedIndex,
