@@ -11,14 +11,12 @@ import 'package:test2/sign_up_screen.dart';
 
 import 'Therapy_screen.dart';
 import 'constant.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'firebase_options.dart';
 import 'journal_list_screen.dart';
 import 'splashscreen.dart';
 import 'journal.dart';
-import 'package:camera/camera.dart';
 import 'journal_entry.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }
@@ -199,13 +197,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     DownloadManager downloadManager =
-        DownloadManager(imageUrl: imageUrl, context: context);
+    DownloadManager(imageUrl: imageUrl, context: context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             "Art Therapy",
-            style: const TextStyle(fontFamily: "DancingScript", fontSize: 32),
+            style: TextStyle(fontFamily: "DancingScript", fontSize: 32),
           ),
           centerTitle: true,
         ),
@@ -220,25 +218,25 @@ class _MyHomePageState extends State<MyHomePage> {
                           downloadManager.askToDownloadImage();
                         },
                         child: Image.network(
-                          imageUrl ?? "",
+                          imageUrl,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(
                         dailyText ?? "",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontFamily: "EduVICWANTBeginner"),
                       ),
                     ],
                   ),
                 ),
               )
-            : Container(
+            : SizedBox(
                 height: MediaQuery.of(context).size.height,
-                child: Center(
+                child: const Center(
                   child: CircularProgressIndicator(),
                 ))
 
