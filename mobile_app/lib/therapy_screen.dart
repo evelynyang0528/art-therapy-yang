@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -99,16 +98,19 @@ class _TherapyScreenState extends State<TherapyScreen> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           toolbarHeight: 100,
-          title:  const Column(
+          title: const Column(
             children: [
               Text(
                 "Art Therapy",
                 style: TextStyle(fontFamily: "DancingScript", fontSize: 32),
-
               ),
-              SizedBox(height: 10,),
-
-              Text( "Video Therapy",style: TextStyle(fontSize: 18), )
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Video Therapy",
+                style: TextStyle(fontSize: 18),
+              )
             ],
           ),
           centerTitle: true,
@@ -124,11 +126,16 @@ class _TherapyScreenState extends State<TherapyScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  Align( alignment: Alignment.bottomCenter,child: Container(
-                    margin: const EdgeInsets.all(60.0),
-                    color: Colors.grey.shade100,
-                    child: Text("your emotion: $emotion",style: TextStyle(fontSize: 24),),
-                  ))
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: const EdgeInsets.all(60.0),
+                        color: Colors.grey.shade100,
+                        child: Text(
+                          "your emotion: $emotion",
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                      ))
                 ],
               )
             : SingleChildScrollView(
@@ -142,7 +149,7 @@ class _TherapyScreenState extends State<TherapyScreen> {
                         "A 10 seconds video will be recorded\n Please put your face in front of the camera.",
                         textAlign: TextAlign.center,
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 60,
                     ),
                     if (cameraController != null &&
@@ -154,7 +161,7 @@ class _TherapyScreenState extends State<TherapyScreen> {
                           child: CameraPreview(cameraController!),
                         ),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     ElevatedButton(
@@ -164,13 +171,13 @@ class _TherapyScreenState extends State<TherapyScreen> {
                         }
                       },
                       child: isRecording
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 120,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text("Recording..."),
+                                  Text("Recording..."),
                                   SizedBox(
                                       width: 20,
                                       height: 20,
@@ -181,13 +188,13 @@ class _TherapyScreenState extends State<TherapyScreen> {
                           : const Text("Start Therapy"),
                     ),
                     if (!isRecording)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                             "we will analyze your emotion using this video"),
                       ),
                     Text(emotion,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                         )),
                   ],

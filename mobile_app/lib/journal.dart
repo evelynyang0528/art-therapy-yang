@@ -1,16 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test2/journal_list_screen.dart';
-import 'image_view_page.dart';
-import 'package:path/path.dart' show join;
-import 'journal_entry.dart';
-import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'constant.dart';
 
 class AddJournalScreen extends StatefulWidget {
   const AddJournalScreen({
@@ -31,12 +21,13 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
   }
 
   void _onChangeText(String text) {
-      if (text.length > 1){
-        setState(() {
-          isButtonEnabled = text.isNotEmpty;
-        });
-      }
+    if (text.length > 1) {
+      setState(() {
+        isButtonEnabled = text.isNotEmpty;
+      });
+    }
   }
+
   // save the journal to the user device.
   saveJournal() async {
     String text = _textcontroller.text;
@@ -60,8 +51,7 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
       );
 
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) =>  JournalListScreen())
-      );
+          MaterialPageRoute(builder: (context) => const JournalListScreen()));
     }
 
     // add this journal we have create to the list.
@@ -73,15 +63,18 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-         toolbarHeight: 80,
-          title:  const Column(
+          toolbarHeight: 80,
+          title: const Column(
             children: [
-              Text(
-                "Art Therapy",
-                style: TextStyle(fontFamily: "DancingScript", fontSize: 32)
+              Text("Art Therapy",
+                  style: TextStyle(fontFamily: "DancingScript", fontSize: 32)),
+              SizedBox(
+                height: 10,
               ),
-              SizedBox(height: 10,),
-              Text("Add Entry",style: TextStyle(fontSize: 18), )
+              Text(
+                "Add Entry",
+                style: TextStyle(fontSize: 18),
+              )
             ],
           ),
           centerTitle: true,
@@ -107,7 +100,7 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
                         border: OutlineInputBorder(),
                       ),
                       controller: _textcontroller,
-                      onChanged:_onChangeText,
+                      onChanged: _onChangeText,
                       maxLines: 5,
                     ),
                   ),
@@ -115,13 +108,13 @@ class _AddJournalScreenState extends State<AddJournalScreen> {
                     height: 20,
                   ),
                   ElevatedButton(
-                      onPressed:isButtonEnabled ? saveJournal : null,
-                      child: Text("Add Entry"),)
+                    onPressed: isButtonEnabled ? saveJournal : null,
+                    child: const Text("Add Entry"),
+                  )
                 ],
               ),
             ),
           ],
         ));
-    ();
   }
 }

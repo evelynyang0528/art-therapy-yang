@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -38,18 +37,18 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 height: MediaQuery.of(context).size.height - 60,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(35),
                     topRight: Radius.circular(35),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                      UserProfile(),
+                    UserProfile(),
                     UserProfile(),
                     UserProfile(),
                   ],
@@ -68,7 +67,7 @@ class UserProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return const Column(
       children: [
         CircleAvatar(
           maxRadius: 40.0,

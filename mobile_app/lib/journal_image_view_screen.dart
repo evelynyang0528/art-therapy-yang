@@ -69,8 +69,8 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadManager downloadManager =
-        DownloadManager(imageUrl: appimageurl, context: context);
+    // DownloadManager downloadManager =
+    //     DownloadManager(imageUrl: appimageurl, context: context);
 
     return Scaffold(
       body: SafeArea(
@@ -80,7 +80,7 @@ class _JournalImageViewScreenState extends State<JournalImageViewScreen> {
                 children: [
                   GestureDetector(
                     onLongPress: () {
-                      downloadManager.askToDownloadImage();
+                      // downloadManager.askToDownloadImage();
                     },
                     child: Container(
                       //  width: MediaQuery.of(context).size.width * 2,

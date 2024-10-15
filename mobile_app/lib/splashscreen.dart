@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'package:camera/camera.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key, });
+  const SplashScreen({
+    super.key,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -19,9 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> init() async {
     await Future.delayed(const Duration(seconds: 4)).then((value) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => RouterPage()
-        ),
+        MaterialPageRoute(builder: (context) => const RouterPage()),
       );
     });
   }

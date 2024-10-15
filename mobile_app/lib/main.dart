@@ -1,14 +1,7 @@
 import 'dart:convert';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:test2/chat_screen.dart';
-import 'package:test2/custom_widget.dart';
 import 'package:test2/download_manager.dart';
-import 'package:test2/login_screen.dart';
-import 'package:test2/music_page.dart';
 import 'package:test2/sign_up_screen.dart';
-
 import 'Therapy_screen.dart';
 import 'constant.dart';
 import 'package:flutter/material.dart';
@@ -64,17 +57,16 @@ class _RouterPageState extends State<RouterPage> {
   int selectedIndex = 0;
 
   List<Widget> screens = [
-    MyHomePage(),
-    JournalListScreen(),
-    AddJournalScreen(),
-    TherapyScreen(
+    const MyHomePage(),
+    const JournalListScreen(),
+    const AddJournalScreen(),
+    const TherapyScreen(
       therapyImage: "appimageurl",
     ),
     // const ChatScreen()
     // LoginScreen()
-    SignUpScreen(),
+    const SignUpScreen(),
   ];
-
 
   void _onItemTap(int index) {
     setState(() {
@@ -197,50 +189,49 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     DownloadManager downloadManager =
-    DownloadManager(imageUrl: imageUrl, context: context);
+        DownloadManager(imageUrl: imageUrl, context: context);
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: const Text(
-            "Art Therapy",
-            style: TextStyle(fontFamily: "DancingScript", fontSize: 32),
-          ),
-          centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text(
+          "Art Therapy",
+          style: TextStyle(fontFamily: "DancingScript", fontSize: 32),
         ),
-        body: imageUrl.isNotEmpty
-            ? SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onLongPress: () {
-                          downloadManager.askToDownloadImage();
-                        },
-                        child: Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        ),
+        centerTitle: true,
+      ),
+      body: imageUrl.isNotEmpty
+          ? SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onLongPress: () {
+                        downloadManager.askToDownloadImage();
+                      },
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        dailyText ?? "",
-                        style: const TextStyle(
-                            fontSize: 20, fontFamily: "EduVICWANTBeginner"),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      dailyText ?? "",
+                      style: const TextStyle(
+                          fontSize: 20, fontFamily: "EduVICWANTBeginner"),
+                    ),
+                  ],
                 ),
-              )
-            : SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ))
-
-        // This trailing comma makes auto-formatting nicer for build methods.
-        );
+              ),
+            )
+          : SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+    );
   }
 }

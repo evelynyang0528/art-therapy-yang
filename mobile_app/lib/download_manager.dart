@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -30,7 +30,7 @@ class DownloadManager {
       var response = await http.get(Uri.parse(imageUrl));
       if (response.statusCode == 200) {
         print('Image downloaded successfully');
-        final result = await ImageGallerySaver.saveImage(
+        final result = await ImageGallerySaverPlus.saveImage(
           Uint8List.fromList(response.bodyBytes),
           quality: 100,
           name: "daily_image_${DateTime.now().toIso8601String()}",

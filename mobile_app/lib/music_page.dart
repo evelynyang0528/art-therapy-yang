@@ -51,13 +51,11 @@ class _MusicPageState extends State<MusicPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        musicUrl.isNotEmpty
-          ? AudioPlayerScreen(
-              audioUrl: musicUrl,
-            )
-          : const CircularProgressIndicator();
-
+    return musicUrl.isNotEmpty
+        ? AudioPlayerScreen(
+            audioUrl: musicUrl,
+          )
+        : const CircularProgressIndicator();
   }
 }
 
@@ -86,10 +84,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   bool get _isPlaying => _playerState == PlayerState.playing;
   bool get _isPaused => _playerState == PlayerState.paused;
   bool get _isStopped => _playerState == PlayerState.stopped;
-  String get _positionText=> _position.toString().split(".").first ?? "";
-  String get _durationText=> _duration.toString().split(".").first ?? "";
-
-
+  String get _positionText => _position.toString().split(".").first;
+  String get _durationText => _duration.toString().split(".").first;
 
   @override
   void initState() {
@@ -161,13 +157,12 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         _isPlaying
             ? IconButton(
                 onPressed: _isPlaying ? pauseAudio : null,
-                icon: Icon(
+                icon: const Icon(
                   Icons.pause,
                   size: 40,
-
                 ))
             : IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.play_arrow,
                   size: 40,
                   color: Colors.black,
@@ -189,11 +184,11 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             player.seek(Duration(milliseconds: position.round()));
           },
         ),
-        Text(_position!=null ?
-        "$_positionText / $_durationText":
-            _duration!=null?
-                _durationText:""
-        )
+        Text(_position != null
+            ? "$_positionText / $_durationText"
+            : _duration != null
+                ? _durationText
+                : "")
       ],
     );
   }

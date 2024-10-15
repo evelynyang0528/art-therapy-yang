@@ -9,8 +9,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   String passwordError = "";
 
@@ -19,34 +19,33 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Login",
                 style: TextStyle(fontSize: 28),
               ),
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(label: Text("Email")),
+                decoration: const InputDecoration(label: Text("Email")),
               ),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(label: Text("Password")),
+                decoration: const InputDecoration(label: Text("Password")),
               ),
               if (passwordError != "")
                 Text(
                   passwordError,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
                 onPressed: () {
-
                   if (_passwordController.text.length < 8) {
                     setState(() {
                       passwordError =
@@ -56,16 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       passwordError = "";
                     });
-
                   }
                 },
-                child: Text("Login"),
+                child: const Text("Login"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Text("You don't have an account?"),
-              SizedBox(
+              const Text("You don't have an account?"),
+              const SizedBox(
                 width: 5,
               ),
               GestureDetector(
@@ -73,9 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SignUpScreen()));
+                            builder: (context) => const SignUpScreen()));
                   },
-                  child: Text(
+                  child: const Text(
                     "Create account",
                     style: TextStyle(
                         color: Colors.blue,

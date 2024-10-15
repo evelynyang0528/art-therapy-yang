@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -12,7 +11,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmpasswordController =
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
   String userFeedbackError = "";
 
@@ -29,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       isSuccessful = true;
     }
 
-    if (_passwordController.text == _confirmpasswordController.text) {
+    if (_passwordController.text == _confirmPasswordController.text) {
       setState(() {
         userFeedbackError = "";
       });
@@ -91,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               decoration: const InputDecoration(label: Text("Password")),
             ),
             TextField(
-              controller: _confirmpasswordController,
+              controller: _confirmPasswordController,
               decoration:
                   const InputDecoration(label: Text("Confirm Password")),
             ),
@@ -107,12 +106,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: () {
                 print(_emailController.text);
                 print(_passwordController.text);
-                print(_confirmpasswordController.text);
+                print(_confirmPasswordController.text);
 
                 bool isSuccessful = validatePassword();
                 if (isSuccessful) {}
               },
-              child: const Text("Signup"),
+              child: const Text("Sign Up"),
             ),
             const SizedBox(
               height: 50,
